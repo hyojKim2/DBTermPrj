@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>식당 예약</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        select, input[type="text"], input[type="number"], input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .menu-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .menu-item input[type="number"] {
+            width: 60px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>식당 예약</h1>
+
+    <form method="POST">
+        <!-- 날짜 선택 -->
+        <div class="form-group">
+            <label for="date">예약 날짜:</label>
+            <input type="date" id="date" name="date" required>
+        </div>
+
+        <!-- 시간 선택 -->
+        <div class="form-group">
+            <label for="time">예약 시간:</label>
+            <select id="time" name="time" required>
+                {% for hour in range(11, 21) %}
+                <option value="{{ hour }}:00">{{ hour }}:00</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- 메뉴 선택 -->
+        <div class="form-group">
+            <label for="menu">메뉴 선택:</label>
+            <div class="menu-container">
+                {% for menu in menu_items %}
+                <div class="menu-item">
+                    <label>
+                        <input type="checkbox" name="menu" value="{{ menu[0] }}-{{ menu[1] }}"> {{ menu[0] }} - {{ menu[1] }}원
+                    </label>
+                    <input type="number" name="menu_count" value="1" min="1" data-price="{{ menu[1] }}" data-menu="{{ menu[0] }}" class="menu-count">
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- 실시간 총 가격 업데이트 -->
+        <div class="form-group">
+            <label for="total_price">총 가격:</label>
+            <input type="text" id="total_price" readonly value="0 원">
+        </div>
+
+        <!-- 예약 정보 -->
+        <div class="form-group">
+            <label for="name">이름:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">전화번호:</label>
+            <input type="text" id="phone" name="phone" required>
+        </div>
+
+        <div class="form-group">
+            <label for="people_count">예약 인원:</label>
+            <input type="number" id="people_count" name="people_count" required min="1">
+        </div>
+
+        <button type="submit">예약하기</button>
+    </form>
+</div>
+
+<script>
+    // 메뉴 선택 시 가격 계산
+    const menuCheckboxes = document.querySelectorAll('input[name="menu"]');
+    const menuCounts = document.querySelectorAll('.menu-count');
+    const totalPriceInput = document.getElementById('total_price');
+
+    // 메뉴 체크박스 또는 수량 입력 시 총 가격 업데이트
+    menuCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateTotalPrice);
+    });
+    menuCounts.forEach(input => {
+        input.addEventListener('change', updateTotalPrice);
+    });
+
+    function updateTotalPrice() {
+        let total = 0;
+        
+        // 메뉴 가격 계산
+        menuCheckboxes.forEach((checkbox, index) => {
+            if (checkbox.checked) {
+                const price = parseInt(checkbox.value.split('-')[1]);
+                const quantity = parseInt(menuCounts[index].value);
+                total += price * quantity;
+            }
+        });
+
+        totalPriceInput.value = total + " 원";
+    }
+
+    updateTotalPrice(); // 페이지 로드 시 초기화
+</script>
+
+</body>
+</html>

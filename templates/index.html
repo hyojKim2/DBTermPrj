@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .container {
+            display: flex;
+            gap: 20px; /* 두 상자 간 간격 */
+        }
+        .box {
+            width: 200px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            font-size: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+            color: white;
+            font-weight: bold;
+        }
+        .box:hover {
+            transform: scale(1.05);
+        }
+        .admin-login {
+            background-color: #e45b79; /* 관리자 로그인 상자 색상 */
+        }
+        .reserve {
+            background-color: #84ec6f; /* 식당 예약하기 상자 색상 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="box admin-login" onclick="location.href='/admin-login';">관리자 로그인</div>
+        <div class="box reserve" onclick="location.href='/reserve';">식당 예약하기</div>
+    </div>
+</body>
+</html>

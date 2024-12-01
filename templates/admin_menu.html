@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메뉴 관리</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .dashboard-button {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .dashboard-button:hover {
+            background-color: #0056b3;
+        }
+        .form-container {
+            margin-bottom: 20px;
+        }
+        /* 회색 텍스트 스타일 */
+        .gray-text {
+            color: #cdd4da;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>메뉴 관리</h1>
+
+    <!-- 메뉴 추가 폼 -->
+    <div class="form-container">
+        <h3>새 메뉴 추가</h3>
+        <form method="POST" action="/admin-menu">
+            <label for="menu_name">메뉴 이름:</label>
+            <input type="text" name="menu_name" required><br>
+            <label for="menu_price">가격:</label>
+            <input type="number" name="menu_price" required><br>
+            <button type="submit" name="add_menu" class="dashboard-button">메뉴 추가</button>
+        </form>
+    </div>
+
+    <!-- 메뉴 가격 수정 폼 -->
+    <div class="form-container">
+        <h3>메뉴 가격 수정</h3>
+        <form method="POST" action="/admin-menu">
+            <label for="menu_name">수정할 메뉴 이름:</label>
+            <input type="text" name="menu_name" required><br>
+            <label for="new_menu_price">새로운 가격:</label>
+            <input type="number" name="new_menu_price" required><br>
+            <button type="submit" name="update_menu" class="dashboard-button">메뉴 가격 수정</button>
+        </form>
+    </div>
+
+    <!-- 메뉴 삭제 폼 -->
+    <div class="form-container">
+        <h3>메뉴 판매 상태변경</h3>
+        <form method="POST" action="/admin-menu">
+            <label for="menu_name">변경할 메뉴 이름:</label>
+            <input type="text" name="menu_name" required><br>
+            <button type="submit" name="delete_menu" class="dashboard-button">판매 상태 변경(Y/N)</button>
+        </form>
+    </div>
+
+    <!-- 메뉴 목록 테이블 -->
+    <h3>현재 메뉴 목록</h3>
+    <table>
+        <tr>
+            <th>메뉴 이름</th>
+            <th>가격</th>
+            <th>판매 상태</th>
+        </tr>
+        {% for menu in menu_list %}
+        <tr class="{% if menu[2] == 'N' %}gray-text{% endif %}">
+            <td>{{ menu[0] }}</td>
+            <td>{{ menu[1] }} 원</td>
+            <td>{{ menu[2] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <a href="/admin-dashboard" class="dashboard-button">대시보드로 돌아가기</a>
+</div>
+
+</body>
+</html>
